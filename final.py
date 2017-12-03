@@ -3,7 +3,9 @@ import cv2
 import time
 import easygopigo3 as easy
 gpg=easy.EasyGoPiGo3()
-
+ds=gpg.init_distance_sensor()
+sv=gpg.init_servo()
+s=-13 #servo correction
 
 def interpreter():
     gpg.set_eye_color((255,255,255))
@@ -40,3 +42,18 @@ def interpreter():
                 gpg.time.sleep(.5)
                 gpg.close_left_eye()
             return ans
+
+def maze():
+    #Looks like the maze isn't solveable through wall following
+    #Well, maybe if we treat the walls like obstacles we want to go around we can
+    #Apparently this is a thing, Pledge's Alg.
+    sv.rotate_servo(180+s) #point right
+    while !dest:
+        d=ds.read_in()
+        gpg.drive_inches(3) #can be changed
+        if d>7: #assume we're kinda near the middle of the course, change this value in testing
+        
+        
+        
+    
+    
