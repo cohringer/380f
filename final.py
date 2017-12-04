@@ -59,6 +59,45 @@ def maze():
         #check the wikipedia article on maze solvers, basically once you get around an obstacle you pick an arbitrary direction to go in
         #We can also do bounds checking since we know the maze is 5x5
         
+def destroy()
+    dest1=0
+    dest2=0
+    dest3=0
+    while dest1==0:
+        #first waypoint
+        gpg.drive_inches(12)
+        gpg.turn_degrees(90,True)
+        gpg.drive_inches(36)
+        gpg.turn_degrees(-90,True)
+        d=ds.read_in()
+        if d<4: #Check to see if we're close enough to the folder
+            color=topColor('folder1')
+            BothBlink(color)
+            dest1=1
+        else: 
+            while d>5:
+                gpg.drive_inches(1)
+                d=ds.read_in()
+            color=topColor('folder1')
+            BothBlink(color)
+            dest1=1
+    while dest2==0:
+        #second waypoint
+        #This is where we're most likely to hit obstacles, so let's implement some distance checking
+        gpg.turn_degrees(90,True)
+        sv.rotate_servo(167)
+        gpg.drive_in(12)
+        gpg.turn_degrees(90,True)
+        
+        
+        
+def BothBlink(RGBval):
+    gpg.set_right_eye_color(RGBval)
+    gpg.set_left_eye_color(RGBval)
+    gpg.open_eyes()
+    time.sleep(.5)
+    gpg.close_eyes()
+    time.sleep(.5)
         
     
     
