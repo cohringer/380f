@@ -63,32 +63,62 @@ def destroy()
     dest1=0
     dest2=0
     dest3=0
+    begin=True
     while dest1==0:
         #first waypoint
-        gpg.drive_inches(12)
-        gpg.turn_degrees(90,True)
-        gpg.drive_inches(36)
-        gpg.turn_degrees(-90,True)
-        d=ds.read_in()
+        if begin==True:
+            gpg.drive_inches(12)
+            gpg.turn_degrees(90,True)
+            gpg.drive_inches(36)
+            gpg.turn_degrees(-90,True)
+            d=ds.read_in()
+            begin=False
         if d<4: #Check to see if we're close enough to the folder
+            #insert something with the camera
             color=topColor('folder1')
             BothBlink(color)
             dest1=1
         else: 
-            while d>5:
-                gpg.drive_inches(1)
-                d=ds.read_in()
-            color=topColor('folder1')
-            BothBlink(color)
-            dest1=1
+            gpg.drive_inches(1)
+            d=ds.read_in()
     while dest2==0:
         #second waypoint
         #This is where we're most likely to hit obstacles, so let's implement some distance checking
+        d=0
         gpg.turn_degrees(90,True)
         sv.rotate_servo(167)
-        gpg.drive_in(12)
-        gpg.turn_degrees(90,True)
-        
+        trav=0
+        while ds.read_in()>5:
+            if trav<12:
+                gpg.drive_in(2)
+                trav+=2
+                trav1=0
+            elif trav==12: #ensure one turn
+                gpg.turn_degrees(90,True)
+                trav+=1
+            if trav1<36:
+                gpg.drive_in(2)
+                trav1+=2
+                trav2=0
+            elif trav1==36:
+                gpg.turn_degrees(90,True)
+                trav1+=1
+                sv.rotate_servo(103)
+            if trav2<12:
+                gpg.drive_in(2)
+                trav2+=2
+            elif trav2==12:
+                gpg.turn_degrees(90,True)
+                trav2+=1
+                break
+        if d<4: #Check to see if we're close enough to the folder
+            #Insert something about the camera
+            color=topColor('folder2.png')
+            BothBlink(color)
+            dest2=1
+        else: 
+            gpg.drive_inches(1)
+            d=ds.read_in()
         
         
 def BothBlink(RGBval):
