@@ -49,10 +49,15 @@ def maze():
     #Apparently this is a thing, Pledge's Alg.
     sv.rotate_servo(180+s) #point right
     while !dest:
+        #have to rotate the servo back and forth to make sure it doesn't crash into a wall ahead of it
         d=ds.read_in()
         gpg.drive_inches(3) #can be changed
+        dt+=3
         if d>7: #assume we're kinda near the middle of the course, change this value in testing
-        
+            gpg.turn_degrees(90,True) #always turn right
+            
+        #check the wikipedia article on maze solvers, basically once you get around an obstacle you pick an arbitrary direction to go in
+        #We can also do bounds checking since we know the maze is 5x5
         
         
     
