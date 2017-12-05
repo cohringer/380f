@@ -63,6 +63,8 @@ def maze():
         #We can also do bounds checking since we know the maze is 5x5
         
 def destroy()
+    sv.reset_servo() 
+    sa=90
     dest1=0
     dest2=0
     dest3=0
@@ -90,30 +92,37 @@ def destroy()
         d=0
         gpg.turn_degrees(90,True)
         sv.rotate_servo(167)
+        sa=180
         trav=0
-        while ds.read_in()>5:
-            if trav<12:
-                gpg.drive_in(2)
-                trav+=2
-                trav1=0
-            elif trav==12: #ensure one turn
-                gpg.turn_degrees(90,True)
-                trav+=1
-            if trav1<36:
-                gpg.drive_in(2)
-                trav1+=2
-                trav2=0
-            elif trav1==36:
-                gpg.turn_degrees(90,True)
-                trav1+=1
-                sv.rotate_servo(103)
-            if trav2<12:
-                gpg.drive_in(2)
-                trav2+=2
-            elif trav2==12:
-                gpg.turn_degrees(90,True)
-                trav2+=1
-                break
+        trav1=60
+        trav2=60
+        dc=True #distance checking
+        while dc:
+            if ds.read_in<5:
+                if trav<12:
+                    gpg.drive_in(2)
+                    trav+=2
+                    trav1=0
+                elif trav==12: #ensure one turn
+                    gpg.turn_degrees(90,True)
+                    trav+=1
+                if trav1<36:
+                    gpg.drive_in(2)
+                    trav1+=2
+                    trav2=0
+                elif trav1==36:
+                    gpg.turn_degrees(90,True)
+                    trav1+=1
+                    sv.rotate_servo(103)
+                if trav2<12:
+                    gpg.drive_in(2)
+                    trav2+=2
+                elif trav2==12:
+                    gpg.turn_degrees(90,True)
+                    trav2+=1
+                    break
+            else: 
+                wiggle(sa)
         if d<4: #Check to see if we're close enough to the folder
             camera.capture('folder1.png')
             color=topColor('folder1.png')
@@ -128,12 +137,13 @@ def destroy()
             trav=0
             trav1=60 #won't trigger prematurely
             trav2=60
+            begin=True
             while ds.read_in()>5:
-                if trav==0:
+                if begin=True:
                     gpg.turn_degrees(90,True)
                     sv.rotate_servo(13)
-                    trav+=2
-                elif trav<14 && trav!=0:
+                    begin=False
+                elif trav<12:
                     gpg.drive_in(2)
                     trav+=2
                 elif trav==14:
@@ -324,4 +334,5 @@ def MedianRead_mm():#distance sensor is unreliable, use this to get more accurat
             distances.append(ds.read_mm())
     mediandist=median(distances)
     return mediandist  
-    
+def wiggle(sa):
+    if abs( 
