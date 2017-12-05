@@ -75,7 +75,7 @@ def destroy()
             begin=False
         if d<4: #Check to see if we're close enough to the folder
             #insert something with the camera
-            color=topColor('folder1')
+            color=topColor('folder')
             BothBlink(color)
             dest1=1
         else: 
@@ -113,14 +113,70 @@ def destroy()
                 break
         if d<4: #Check to see if we're close enough to the folder
             #Insert something about the camera
-            color=topColor('folder2.png')
+            color=topColor('folder1.png')
             BothBlink(color)
             dest2=1
         else: 
             gpg.drive_inches(1)
             d=ds.read_in()
-        
-        
+    jail=True #aka still have to be careful about obstacles
+    while dest3==0:
+        while jail:
+            trav=0
+            trav1=60 #won't trigger prematurely
+            trav2=60
+            while ds.read_in()>5:
+                if trav==0:
+                    gpg.turn_degrees(90,True)
+                    sv.rotate_servo(13)
+                    trav+=2
+                elif trav<14 && trav!=0:
+                    gpg.drive_in(2)
+                    trav+=2
+                elif trav==14:
+                    gpg.turn(-90,True)
+                    trav1=0
+                    trav+=1
+                if trav1<36:
+                    gpg.drive_in(2)
+                    trav1+=2
+                elif trav1==36:
+                    gpg.turn_degrees(-90,True)
+                    trav2=0
+                    trav1+=1
+                if trav2<24:
+                    gpg.drive_in(2)
+                    trav2+=2
+                elif trav2==24:
+                    jail=False
+                    break
+        gpg.drive_in(12)
+        gpg.turn_degrees(-90,True)
+        gpg.drive_in(12)
+        jail=True
+        trav=0
+        while jail:
+            while ds.read_in()>5:
+               if trav<24:
+                    gpg.drive_in(2)
+                    trav+=2
+                elif trav==24:
+                    gpg.turn_degrees(90,True)
+                    jail=False
+                    break
+        gpg.drive_in(12)
+        gpg.turn_degrees(90)
+        #insert camera stuff
+        d=ds.read_in()
+        if d<4: #Check to see if we're close enough to the folder
+            #insert something with the camera
+            color=topColor('folder2.png')
+            BothBlink(color)
+            dest3=1
+        else: 
+            gpg.drive_inches(1)
+            d=ds.read_in()
+                    
 def BothBlink(RGBval):
     gpg.set_right_eye_color(RGBval)
     gpg.set_left_eye_color(RGBval)
