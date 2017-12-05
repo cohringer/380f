@@ -179,7 +179,138 @@ def destroy()
         else: 
             gpg.drive_inches(1)
             d=ds.read_in()
-                    
+            
+def Interpreter_1():#NOTES: need to add angle/spin corrections to everything that wasn't my test case
+    sv.rotate_servo(90+ServoCorrection)
+    First_Dist=MedianRead_mm()*mm2in
+    correctiondist=First_Dist-24
+    gpg.drive_inches(correctiondist)#lines up at 24 in
+    gpg.drive_inches(24-16)#optimal picture taking distance
+    camera.capture("Middle.png")
+    MiddleCase=numDots("Middle.png")
+    print(MiddleCase)
+    if((MiddleCase>2) and (MiddleCase<7)):#this is the answer @index 3
+            BothBlink(RGBred)
+            BothBlink(RGBred)
+            BothBlink(RGBred)
+            for i in range(0,MiddleCase):
+                    BothBlink(RGBblue)
+    elif (MiddleCase==1):#answer lies to the left
+            gpg.turn_degrees(-90+5,True)
+            gpg.set_speed(300)
+            gpg.drive_inches(28+2)#drive to the box at index 1. doesnt do it perfectly, had to add 2
+            gpg.turn_degrees(90+10,True)#doesn't spin perfectly, had to adjust
+            Second_Dist=MedianRead_mm()*mm2in
+            correctiondist=Second_Dist-16
+            gpg.drive_inches(correctiondist)
+            camera.capture("Second.png")
+            SecondCase=numDots("Second.png")
+            print(SecondCase)
+            if((SecondCase>2) and (SecondCase<7)):#this is the answer @index 1
+                    BothBlink(RGBred)
+                    for i in range(0,SecondCase):
+                            BothBlink(RGBblue)
+            elif (SecondCase==1):#answer lies to the left
+                    gpg.turn_degrees(-90,True)
+                    gpg.set_speed(300)
+                    gpg.drive_inches(14+2)#drive to the box at index 0. doesnt do it perfectly, had to add 2
+                    gpg.turn_degrees(90,True)
+                    Second_Dist=MedianRead_mm()*mm2in
+                    correctiondist=Second_Dist-16
+                    gpg.drive_inches(correctiondist)
+                    #arrived @ind 0
+                    camera.capture("Third.png")
+                    ThirdCase=numDots("Third.png")
+                    print(ThirdCase)
+                    #don't blink red, because index=0
+                    for i in range(0,ThirdCase):
+                            BothBlink(RGBblue)
+            elif(SecondCase==2):#answer lies to the right
+                    gpg.turn_degrees(90,True)
+                    gpg.set_speed(300)
+                    gpg.drive_inches(14+2)#drive to the box at index 2. doesnt do it perfectly, had to add 2
+                    gpg.turn_degrees(-90,True)
+                    Second_Dist=MedianRead_mm()*mm2in
+                    correctiondist=Second_Dist-16
+                    gpg.drive_inches(correctiondist)
+                    #arrived @ind 2
+                    camera.capture("Third.png")
+                    ThirdCase=numDots("Third.png")
+                    print(ThirdCase)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    for i in range(0,ThirdCase):
+                            BothBlink(RGBblue)
+    elif(MiddleCase==2):#answer lies to the right
+            gpg.turn_degrees(90,True)
+            gpg.set_speed(300)
+            gpg.drive_inches(28+2)#drive to the box at index 5. doesnt do it perfectly, had to add 2
+            gpg.turn_degrees(-90,True)
+            Second_Dist=MedianRead_mm()*mm2in
+            correctiondist=Second_Dist-16
+            gpg.drive_inches(correctiondist)
+            camera.capture("Second.png")
+            SecondCase=numDots("Second.png")
+            print(SecondCase)
+            if((SecondCase>2) and (SecondCase<7)):#this is the answer @index 5
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    for i in range(0,SecondCase):
+                            BothBlink(RGBblue)
+            elif(SecondCase==1):#answer lies to the left
+                    gpg.turn_degrees(-90,True)
+                    gpg.set_speed(300)
+                    gpg.drive_inches(14+2)#drive to the box at index 4. doesnt do it perfectly, had to add 2
+                    gpg.turn_degrees(90,True)
+                    Second_Dist=MedianRead_mm()*mm2in
+                    correctiondist=Second_Dist-16
+                    gpg.drive_inches(correctiondist)
+                    #arrived @ind 4
+                    camera.capture("Third.png")
+                    ThirdCase=numDots("Third.png")
+                    print(ThirdCase)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    for i in range(0,ThirdCase):
+                            BothBlink(RGBblue)
+            elif(SecondCase==2):#answer lies to the right
+                    gpg.turn_degrees(90,True)
+                    gpg.set_speed(300)
+                    gpg.drive_inches(14+2)#drive to the box at index 6. doesnt do it perfectly, had to add 2
+                    gpg.turn_degrees(-90,True)
+                    Second_Dist=MedianRead_mm()*mm2in
+                    correctiondist=Second_Dist-16
+                    gpg.drive_inches(correctiondist)
+                    #arrived @ind 6
+                    camera.capture("Third.png")
+                    ThirdCase=numDots("Third.png")
+                    print(ThirdCase)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    BothBlink(RGBred)
+                    for i in range(0,ThirdCase):
+                            BothBlink(RGBblue)
+    else:pass#retest, add code later-get closer, go left, go right? add condition(==0?)                            
+def LeftWink(RGBval):#NOTE: for whatever reason, the open_right_eye method opens the left eye, and vice versa. these wink methods correct for that.
+    gpg.set_right_eye_color(RGBval)
+    gpg.open_right_eye()
+    time.sleep(.5)
+    gpg.close_right_eye()
+    time.sleep(.5)
+def RightWink(RGBval):
+    gpg.set_left_eye_color(RGBval)
+    gpg.open_left_eye()
+    time.sleep(.5)
+    gpg.close_left_eye()
+    time.sleep(.5)
 def BothBlink(RGBval):
     gpg.set_right_eye_color(RGBval)
     gpg.set_left_eye_color(RGBval)
@@ -187,6 +318,10 @@ def BothBlink(RGBval):
     time.sleep(.5)
     gpg.close_eyes()
     time.sleep(.5)
-        
-    
+def MedianRead_mm():#distance sensor is unreliable, use this to get more accurate measurements
+    distances=[]
+    for k in range(0,10):
+            distances.append(ds.read_mm())
+    mediandist=median(distances)
+    return mediandist  
     
