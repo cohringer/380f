@@ -80,7 +80,7 @@ def destroy()
             begin=False
         if d<4: #Check to see if we're close enough to the folder
             camera.capture('folder.png')
-            color=topColor('folder.png')
+            color=spectrum('folder.png')
             BothBlink(color)
             dest1=1
         else: 
@@ -92,7 +92,7 @@ def destroy()
         d=0
         gpg.turn_degrees(90,True)
         sv.rotate_servo(167)
-        sa=180
+        sa=167
         trav=0
         trav1=60
         trav2=60
@@ -113,7 +113,8 @@ def destroy()
                 elif trav1==36:
                     gpg.turn_degrees(90,True)
                     trav1+=1
-                    sv.rotate_servo(103)
+                    sv.rotate_servo(77)
+                    sa=77
                 if trav2<12:
                     gpg.drive_in(2)
                     trav2+=2
@@ -122,10 +123,11 @@ def destroy()
                     trav2+=1
                     break
             else: 
-                wiggle(sa)
+                LRshimmy(1)
+                sv.rotate_servo(sa)
         if d<4: #Check to see if we're close enough to the folder
             camera.capture('folder1.png')
-            color=topColor('folder1.png')
+            color=spectrum('folder1.png')
             BothBlink(color)
             dest2=1
         else: 
@@ -138,10 +140,11 @@ def destroy()
             trav1=60 #won't trigger prematurely
             trav2=60
             begin=True
-            while ds.read_in()>5:
+            if ds.read_in()>5:
                 if begin=True:
                     gpg.turn_degrees(90,True)
                     sv.rotate_servo(13)
+                    sa=13
                     begin=False
                 elif trav<12:
                     gpg.drive_in(2)
@@ -162,7 +165,9 @@ def destroy()
                     trav2+=2
                 elif trav2==24:
                     jail=False
-                    break
+            else:
+                LRshimmy(1)
+                sv.rotate_servo(sa)
         gpg.drive_in(12)
         gpg.turn_degrees(-90,True)
         gpg.drive_in(12)
@@ -183,7 +188,7 @@ def destroy()
         d=ds.read_in()
         if d<4: #Check to see if we're close enough to the folder
             #insert something with the camera
-            color=topColor('folder2.png')
+            color=spectrum('folder2.png')
             BothBlink(color)
             dest3=1
         else: 
@@ -334,5 +339,15 @@ def MedianRead_mm():#distance sensor is unreliable, use this to get more accurat
             distances.append(ds.read_mm())
     mediandist=median(distances)
     return mediandist  
-def wiggle(sa):
-    if abs( 
+def spectrum( filePath ):
+	blue=0
+	green=0
+	red=0
+	img=cv2.imread(filePath,1)
+	s=img.shape
+	for i in range(s[0]):
+		for j in range(s[1]):
+			blue+=img.item(i,j,0)
+			green+=img.item(i,j,1)
+			red+=img.item(i,j,2)
+	return [blue, green, red]
