@@ -6,6 +6,9 @@ gpg=easy.EasyGoPiGo3()
 ds=gpg.init_distance_sensor()
 sv=gpg.init_servo()
 s=-13 #servo correction
+from picamera import PiCamera
+from picamera.array import PiRGBArray
+camera=PiCamera()
 
 def interpreter():
     gpg.set_eye_color((255,255,255))
@@ -74,8 +77,8 @@ def destroy()
             d=ds.read_in()
             begin=False
         if d<4: #Check to see if we're close enough to the folder
-            #insert something with the camera
-            color=topColor('folder')
+            camera.capture('folder.png')
+            color=topColor('folder.png')
             BothBlink(color)
             dest1=1
         else: 
@@ -112,7 +115,7 @@ def destroy()
                 trav2+=1
                 break
         if d<4: #Check to see if we're close enough to the folder
-            #Insert something about the camera
+            camera.capture('folder1.png')
             color=topColor('folder1.png')
             BothBlink(color)
             dest2=1
@@ -166,7 +169,7 @@ def destroy()
                     break
         gpg.drive_in(12)
         gpg.turn_degrees(90)
-        #insert camera stuff
+        camera.capture('folder1.png')
         d=ds.read_in()
         if d<4: #Check to see if we're close enough to the folder
             #insert something with the camera
